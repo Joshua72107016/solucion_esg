@@ -50,15 +50,24 @@ class TestEcuacionSegundoGrado(unittest.TestCase):
         self.assertAlmostEqual(item["RaizEsperada1"], RaizActual1, 2)
         self.assertAlmostEqual(item["RaizEsperada2"], RaizActual2, 2)
 
-    def test_solucionESG_parametrosNumericos_raicesComplejasConjugadas(self):
+    def test_solucionESG_parametrosNumericos_raicesComplejasConjugadas_subTest(self):
+
         # Arrange
         ecuacionSegundoGrado = EcuacionSegundoGrado()
-        ecuacionSegundoGrado.a = 1
-        ecuacionSegundoGrado.b = 2
-        ecuacionSegundoGrado.c = 3
-        raiz_esperada1 = complex(-1, 1.41)
-        raiz_esperada2 = complex(-1, -1.41)
+        items = (
+            {"Case": "Caso 01", "a": 1, "b": 1, "c": 1, "RaizEsperada1": complex(-0.50, 0.87),
+             "RaizEsperada2": complex(-0.50, -0.87)},
+            {"Case": "Caso 02", "a": 1, "b": 2, "c": 3, "RaizEsperada1": complex(-1.00, 1.41),
+             "RaizEsperada2": complex(-1.00, -1.41)},
+        )
         # Do
+        for item in items:
+            with self.subTest(item["Case"]):
+                ecuacionSegundoGrado.a = item["a"]
+        ecuacionSegundoGrado.b = item["b"]
+        ecuacionSegundoGrado.c = item["c"]
+        raiz_esperada1 = item["RaizEsperada1"]
+        raiz_esperada2 = item["RaizEsperada2"]
         raiz_actual1, raiz_actual2 = ecuacionSegundoGrado.solucionESG()
         # Assert
         self.assertAlmostEqual(raiz_esperada1.real, raiz_actual1.real, 2)
